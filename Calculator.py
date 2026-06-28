@@ -1,45 +1,109 @@
 import tkinter as tk
 
 expresion = ""
+expresionAnterior = ""
 resultadoMostrar = False
+parentesis = 0
+def preparacion(expr):
+
+    if "%" in expr:
+        expr = expr.replace("%", "/100")
+
+
+    resultado = ""
+    for i in range(len(expr)):
+        actual = expr[i]
+        
+        if i > 0:
+            prev = expr[i - 1]
+        else:
+            prev = ""
+        
+        if i < len(expr) -1:
+            next_char = expr[i + 1]
+        else:
+            next_char = ""
+        
+        if actual == "(" and (prev.isdigit() or prev == ")"):
+            resultado += "*("
+        
+        elif actual.isdigit() and prev == ")":
+            resultado += "*" + actual
+        
+        else:
+            resultado += actual
+
+    return resultado
 
 def button_pressed(valor):
-    global expresion, resultadoMostrar
+    global expresion, resultadoMostrar, expresionAnterior, parentesis
+
+    # 1. DEL
+    if valor == "Del":
+        if resultadoMostrar:
+            expresion = expresionAnterior[:-1]
+        else:
+            expresion = expresion[:-1]
+
+        texto_variable.set(expresion)
+        resultadoMostrar = False
+        return
+
+    # 2. SI VIENE DE RESULTADO
     if resultadoMostrar:
         if valor in "+-*/.":
             resultadoMostrar = False
         else:
             expresion = ""
-            texto_variable.set(expresion)
-            resultadoMostrar = False
 
-    if valor == "C":
+        resultadoMostrar = False
+
+    # 3. AC
+    if valor == "AC":
         expresion = ""
         texto_variable.set(expresion)
         resultadoMostrar = False
-    else:
-        expresion += str(valor)
-        if str(expresion[0]) in "+-./*":
-            expresion = ""
-            texto_variable.set(expresion)
-        texto_variable.set(expresion)
+        return
+
+    # 4. ()
+    if valor == "()":
+        if expresion == "" or expresion[-1] in "+-*/(":
+            valor = "("
+        #SOLO CERRAMOS SI HAY MAS -> (, QUE -> )
+        elif expresion.count("(") > expresion.count(")"):
+            valor = ")"
+        else:
+            valor = "(" 
+
+            
+    # 5. añadir
+    expresion += str(valor)
+
+    # 6. evitar operadores al inicio
+    if expresion and expresion[0] in "+-*/.":
+        expresion = ""
+
+    texto_variable.set(expresion)
 
 def calcular(expresion):
+    expresion = preparacion(expresion)
     resultado = eval(expresion)
+    
     if resultado == int(resultado):
         resultado = int(resultado)
     return resultado
 
 def equal_presed():
-    global expresion, resultadoMostrar
+    global expresion, resultadoMostrar, expresionAnterior
     if expresion == "":
         return
-    try:  
+    try:
+        expresionAnterior = expresion  
         resultado = calcular(str(expresion))
         expresion = str(resultado)
         resultadoMostrar = True
         texto_variable.set(resultado)
-
+ 
     except Exception:
         expresion = ""
         texto_variable.set("Error")
@@ -65,10 +129,11 @@ entry = tk.Entry(NewWindow, textvariable=texto_variable, font=('Helvetica', 24),
 entry.grid(row=0, column=0, columnspan=4, sticky="nsew", pady=6, padx=6)
 
 botones = [
-    ("7", 1, 0), ("8", 1, 1), ("9", 1, 2), ("/", 1, 3),
-    ("4", 2, 0), ("5", 2, 1), ("6", 2, 2), ("*", 2, 3),
-    ("1", 3, 0), ("2", 3, 1), ("3", 3, 2), ("-", 3, 3),
-    ("0", 4, 0), (".", 4, 1), ("C", 4, 2), ("+", 4, 3)
+    ("AC", 1, 0), ("()", 1, 1), ("%", 1, 2), ("/", 1, 3),
+    ("7", 2, 0), ("8", 2, 1), ("9", 2, 2), ("*", 2, 3),
+    ("4", 3, 0), ("5", 3, 1), ("6", 3, 2), ("-", 3, 3),
+    ("1", 4, 0), ("2", 4, 1), ("3", 4, 2), ("+", 4, 3),
+    ("0", 5, 0), (".", 5, 1), ("Del", 5, 2)
 ]
 
 for i in range(len(botones)):
@@ -91,8 +156,6 @@ for i in range(len(botones)):
     #sticky → cuánto del espacio ocupa el botón: n = arriba, s = abajo, e = derecha, w = izquierda. El grid reparte el espacio según weight
 
 botonEqual = tk.Button(NewWindow, text="=", font=('Helvetica', 20, "bold"), command=equal_presed, background="#BDECB6", fg='black', highlightthickness=3, highlightbackground="#cccccc")
-botonEqual.grid(row=5, column=0, columnspan=4, sticky="nsew", padx=3, pady=3, )
-
-
+botonEqual.grid(row=5, column=3, sticky="nsew", padx=3, pady=3, )
 
 NewWindow.mainloop()
