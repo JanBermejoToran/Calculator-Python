@@ -143,7 +143,7 @@ def equal_presed():
 NewWindow = tk.Tk()
 
 NewWindow.title("Calculator")
-NewWindow.iconphoto(False, tk.PhotoImage(file="calculadora.png"))
+#NewWindow.iconphoto(False, tk.PhotoImage(file="calculadora.png"))
 NewWindow.geometry("400x600")
 NewWindow.minsize(400,300)
 NewWindow.maxsize(1200,800)

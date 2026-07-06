@@ -5,7 +5,7 @@ a = Analysis(
     ['Calculator.py'],
     pathex=[],
     binaries=[],
-    datas=[],
+    datas=[('calculadora.png', '.')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -35,5 +35,4 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['calculadora.ico'],
 )
