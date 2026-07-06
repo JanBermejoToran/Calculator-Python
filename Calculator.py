@@ -4,36 +4,67 @@ expresion = ""
 expresionAnterior = ""
 resultadoMostrar = False
 parentesis = 0
+
+def ultimo_numero(expr):
+    i = len(expr) - 1
+
+    while i >= 0 and expr[i] == " ":
+        i -= 1
+
+    if i >= 0 and expr[i] in "+-*/":
+        i -= 1
+
+    fin = i
+
+    while i >= 0 and (expr[i].isdigit() or expr[i] == "."):
+        i -= 1
+
+    inicio = i + 1
+
+    return expr[inicio:fin + 1], inicio, fin
+
+
 def preparacion(expr):
-
-    if "%" in expr:
-        expr = expr.replace("%", "/100")
-
-
     resultado = ""
-    for i in range(len(expr)):
-        actual = expr[i]
-        
-        if i > 0:
-            prev = expr[i - 1]
+    i = 0
+
+    while i < len(expr):
+
+        if expr[i].isdigit():
+            inicio = i
+
+            while i < len(expr) and (expr[i].isdigit() or expr[i] == "."):
+                i += 1
+
+            numero = expr[inicio:i]
+
+            if i < len(expr) and expr[i] == "%":
+
+                base, ini, fin = ultimo_numero(resultado)
+
+                resultado = (
+                    resultado[:ini]
+                    + "(" + base + "*" + numero + "/100)"
+                )
+
+                i += 1
+
+            else:
+                resultado += numero
+
+        elif expr[i] in "+-*/":
+            resultado += expr[i]
+            i += 1
+
+        elif expr[i] in "()":
+            resultado += expr[i]
+            i += 1
+
         else:
-            prev = ""
-        
-        if i < len(expr) -1:
-            next_char = expr[i + 1]
-        else:
-            next_char = ""
-        
-        if actual == "(" and (prev.isdigit() or prev == ")"):
-            resultado += "*("
-        
-        elif actual.isdigit() and prev == ")":
-            resultado += "*" + actual
-        
-        else:
-            resultado += actual
+            i += 1
 
     return resultado
+            
 
 def button_pressed(valor):
     global expresion, resultadoMostrar, expresionAnterior, parentesis
