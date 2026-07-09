@@ -39,6 +39,62 @@ python --version
 ```
 
 ---
+# 📚 Librerías utilizadas
+
+El proyecto no utiliza paquetes externos de Python.
+
+Las únicas dependencias son librerías incluidas en la instalación estándar de Python:
+
+```python
+import tkinter as tk
+```
+
+```python
+tkinter
+```
+
+No es necesario instalar dependencias mediante `pip`.
+
+---
+
+## 🖥️ Dependencia del sistema: Tkinter
+
+La aplicación utiliza **Tkinter** para crear la interfaz gráfica.
+
+Tkinter viene incluido normalmente con las instalaciones oficiales de Python, por lo que en la mayoría de sistemas no es necesario instalar nada adicional.
+
+Sin embargo, algunas distribuciones Linux no incluyen Tkinter por defecto. En ese caso es necesario instalarlo mediante el gestor de paquetes del sistema.
+
+### Arch Linux
+
+```bash
+sudo pacman -S tk
+```
+### Debian / Ubuntu
+```bash
+sudo apt update
+sudo apt install python3-tk
+```
+
+### Fedora
+```bash
+sudo dnf install python3-tkinter
+```
+
+### openSUSE
+```bash
+sudo zypper install python3-tk
+```
+
+
+Después de instalarlo, puedes comprobar que Tkinter funciona correctamente ejecutando:
+
+```bash
+python -m tkinter
+```
+
+Si aparece una ventana de prueba, la instalación es correcta.
+
 
 ## 📥 Instalación
 
@@ -62,17 +118,7 @@ python Calculator.py
 
 ---
 
-# 📚 Librerías utilizadas
 
-El proyecto únicamente utiliza librerías estándar de Python.
-
-```python
-tkinter
-```
-
-No es necesario instalar dependencias mediante `pip`.
-
----
 
 # ⚙️ Funcionamiento
 
