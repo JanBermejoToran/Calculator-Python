@@ -1,6 +1,8 @@
 # 🧮 Calculator - Python & Tkinter
 
+ 
 Una calculadora de escritorio desarrollada en **Python** utilizando **Tkinter** como interfaz gráfica. El objetivo principal del proyecto ha sido aprender el funcionamiento de una interfaz gráfica, la gestión de eventos y el tratamiento de expresiones matemáticas sin utilizar librerías externas.
+
 
 ---
 
