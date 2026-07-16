@@ -45,7 +45,7 @@ python --version
 Clonar el repositorio:
 
 ```bash
-git clone https://github.com/TU_USUARIO/Calculator-Python.git
+git clone https://github.com/Erik-CR46/Calculator-Python.git
 ```
 
 Entrar en la carpeta:
