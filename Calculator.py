@@ -30,7 +30,9 @@ def preparacion(expr):
 
     while i < len(expr):
 
+        # Detectar números
         if expr[i].isdigit():
+
             inicio = i
 
             while i < len(expr) and (expr[i].isdigit() or expr[i] == "."):
@@ -38,24 +40,72 @@ def preparacion(expr):
 
             numero = expr[inicio:i]
 
+            # Si después del número hay %
             if i < len(expr) and expr[i] == "%":
 
-                base, ini, fin = ultimo_numero(resultado)
+                # Buscar si hay una operación antes del número
+                j = len(resultado) - 1
 
-                resultado = (
-                    resultado[:ini]
-                    + "(" + base + "*" + numero + "/100)"
-                )
+                while j >= 0 and resultado[j] == " ":
+                    j -= 1
+
+                tiene_operacion = False
+
+                if j >= 0 and resultado[j] in "+-*/":
+                    tiene_operacion = True
+
+                if tiene_operacion:
+
+                    operador = resultado[j]
+
+                    base = resultado[:j]
+
+                    parentesis = 0
+                    k = len(base) - 1
+
+                    while k >= 0:
+                        if base[k] == ")":
+                            parentesis += 1
+                        elif base[k] == "(":
+                            parentesis -= 1
+
+                        if parentesis == 0 and base[k] in "+-*/":
+                            break
+
+                        k -= 1
+
+                    base = base[k + 1:]
+
+                    if operador in "+-":
+                        resultado += (
+                            "(" + base + operador +
+                            "(" + base + "*" + numero + "/100))"
+                        )
+
+                    elif operador == "*":
+                        resultado += (
+                            "(" + numero + "/100)"
+                        )
+
+                    elif operador == "/":
+                        resultado += (
+                            "(" + numero + "/100)"
+                        )
+                else:
+                    # Porcentaje normal: 9% -> 9/100
+                    resultado += "(" + numero + "/100)"
 
                 i += 1
 
             else:
                 resultado += numero
 
+        # Operadores
         elif expr[i] in "+-*/":
             resultado += expr[i]
             i += 1
 
+        # Paréntesis
         elif expr[i] in "()":
             resultado += expr[i]
             i += 1
